@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>ESDLC — Presenter's Cheat-Sheet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --font:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    /* dark (default) */
+    --bg:#0B0E13; --panel:#141A23; --panel2:#1B2330; --rule:#29323F;
+    --ink:#ECE6DA; --soft:#B4AC9C; --mute:#7E7768;
+    --ember:#EC8B44; --ember-deep:#C86A2A; --teal:#4FC6B9; --ok:#5BB87E; --warn:#E0A94A;
+    --chi:#D94E82;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#F6F2EA; --panel:#FFFFFF; --panel2:#F0EBE0; --rule:#E0D8C8;
+      --ink:#241F18; --soft:#5A5346; --mute:#8A8273; --chi:#BC3264; --ember:#C86A2A; --ember-deep:#A9521E; --teal:#2E8C83; }
+  }
+  :root[data-theme="dark"]{ --bg:#0B0E13; --panel:#141A23; --panel2:#1B2330; --rule:#29323F;
+    --ink:#ECE6DA; --soft:#B4AC9C; --mute:#7E7768; --chi:#D94E82; --ember:#EC8B44; --ember-deep:#C86A2A; --teal:#4FC6B9; }
+  :root[data-theme="light"]{ --bg:#F6F2EA; --panel:#FFFFFF; --panel2:#F0EBE0; --rule:#E0D8C8;
+    --ink:#241F18; --soft:#5A5346; --mute:#8A8273; --chi:#BC3264; --ember:#C86A2A; --ember-deep:#A9521E; --teal:#2E8C83; }
+
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font); line-height:1.5;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:60rem; margin:0 auto; padding:2.4rem 1.4rem 5rem}
+
+  .eyebrow{font-family:var(--mono); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ember)}
+  h1{font-size:clamp(1.8rem,5vw,2.7rem); font-weight:820; letter-spacing:-.025em; margin:.3rem 0 .2rem; line-height:1.03}
+  .lede{color:var(--soft); font-size:1.05rem; max-width:52ch}
+  .legend{font-family:var(--mono); font-size:.74rem; color:var(--mute); margin-top:.8rem; display:flex; gap:1.2rem; flex-wrap:wrap}
+  .legend b{color:var(--teal)}
+
+  /* core message banner */
+  .core{margin:1.6rem 0; border:1px solid var(--rule); border-left:4px solid var(--ember);
+    background:linear-gradient(180deg,rgba(236,139,68,.09),transparent); border-radius:0 12px 12px 0; padding:1rem 1.2rem}
+  .core .k{font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ember); margin-bottom:.3rem}
+  .core p{margin:0; font-size:1.18rem; font-weight:680; letter-spacing:-.01em; text-wrap:balance}
+
+  /* quick facts */
+  .facts{display:flex; gap:.6rem; flex-wrap:wrap; margin:1.1rem 0 .4rem}
+  .fact{border:1px solid var(--rule); background:var(--panel); border-radius:10px; padding:.5rem .8rem; flex:1 1 8rem; min-width:7rem}
+  .fact b{display:block; font-size:1.05rem; font-weight:760; color:var(--ember); font-variant-numeric:tabular-nums}
+  .fact span{font-family:var(--mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.09em; color:var(--mute)}
+
+  h2{font-family:var(--mono); font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soft);
+    margin:2.4rem 0 .9rem; padding-bottom:.5rem; border-bottom:1px solid var(--rule)}
+
+  /* checklist */
+  .check{list-style:none; margin:0; padding:0; display:grid; gap:.5rem}
+  .check li{display:flex; gap:.7rem; align-items:flex-start; background:var(--panel); border:1px solid var(--rule);
+    border-radius:10px; padding:.6rem .85rem; font-size:.94rem}
+  .check .box{flex:0 0 auto; width:1.1rem; height:1.1rem; border:1.5px solid var(--mute); border-radius:5px; margin-top:.12rem}
+  .check b{color:var(--ink)}
+
+  /* timing table */
+  .timing{width:100%; border-collapse:collapse; font-size:.9rem; overflow:hidden; border-radius:12px; border:1px solid var(--rule)}
+  .timing th,.timing td{text-align:left; padding:.55rem .8rem; border-bottom:1px solid var(--rule)}
+  .timing thead th{font-family:var(--mono); font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); background:var(--panel2)}
+  .timing tbody tr:last-child td{border-bottom:none}
+  .timing td.t{font-family:var(--mono); color:var(--ember); font-variant-numeric:tabular-nums; white-space:nowrap}
+  .timing tr.core-row td:first-child::after{content:" ●"; color:var(--ok)}
+  .timing tr.ext-row td:first-child::after{content:" ○"; color:var(--mute)}
+  .timing tfoot td{font-family:var(--mono); font-size:.8rem; color:var(--soft); background:var(--panel2); font-weight:700}
+  .tablewrap{overflow-x:auto}
+
+  /* slide cards */
+  .slide-card{border:1px solid var(--rule); background:var(--panel); border-radius:14px; padding:1.1rem 1.2rem; margin-bottom:1rem}
+  .sc-head{display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap; margin-bottom:.7rem}
+  .sc-num{font-family:var(--mono); font-weight:800; font-size:.9rem; color:#0B0E13; background:var(--ember); border-radius:7px; padding:.12rem .45rem}
+  .sc-title{font-weight:760; font-size:1.18rem; letter-spacing:-.01em}
+  .sc-time{font-family:var(--mono); font-size:.72rem; color:var(--ember); margin-left:auto; white-space:nowrap}
+  .sc-act{font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); border:1px solid var(--rule); border-radius:5px; padding:.1rem .4rem}
+  .lbl{font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); margin:.7rem 0 .25rem}
+  .goal{color:var(--soft); font-size:.92rem}
+  .say{border-left:3px solid var(--teal); background:var(--panel2); border-radius:0 8px 8px 0; padding:.6rem .85rem; font-size:1rem; font-weight:560}
+  .say::before{content:"🗣 "; }
+  .pts{margin:.3rem 0 0; padding-left:1.1rem; font-size:.9rem; color:var(--soft)}
+  .pts li{margin:.2rem 0}
+  .pts b{color:var(--ink)}
+  .trans{margin-top:.7rem; font-size:.88rem; color:var(--mute)}
+  .trans b{color:var(--teal); font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase}
+  .motion{margin-top:.6rem; border:1px dashed var(--ember); border-radius:9px; padding:.5rem .75rem; font-size:.84rem; color:var(--soft); background:rgba(236,139,68,.06)}
+  .motion b{color:var(--ember)}
+
+  /* q&a */
+  .qa{border:1px solid var(--rule); background:var(--panel); border-radius:11px; margin-bottom:.6rem; overflow:hidden}
+  .qa summary{cursor:pointer; padding:.8rem 1rem; font-weight:640; list-style:none; display:flex; gap:.6rem; align-items:flex-start}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:"Q"; font-family:var(--mono); font-weight:800; color:var(--chi); flex:0 0 auto}
+  .qa[open] summary{border-bottom:1px solid var(--rule)}
+  .qa .ans{padding:.8rem 1rem .9rem 2.2rem; font-size:.92rem; color:var(--soft)}
+  .qa .ans b{color:var(--ink)}
+
+  .endnote{margin-top:2.4rem; text-align:center; font-family:var(--mono); font-size:.74rem; color:var(--mute)}
+  .endnote b{color:var(--chi)}
+  a{color:var(--ember)}
+
+  @media print{
+    :root{ --bg:#fff; --panel:#fff; --panel2:#f4f1ea; --rule:#ccc; --ink:#1a1712; --soft:#333; --mute:#666; }
+    body{background:#fff}
+    .slide-card, .qa{break-inside:avoid}
+    .qa[open] .ans, .qa .ans{display:block}
+    .wrap{max-width:none; padding:0}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <p class="eyebrow">Applied AI · iOS</p>
+  <h1>ESDLC — Presenter's Cheat-Sheet</h1>
+  <p class="lede">Шпаргалка до 9-слайдового деку. Тримай на телефоні / другому екрані. Темп вирішуєш сам на сцені.</p>
+  <p class="legend"><span><b>🗣 SAY</b> = готова англійська репліка (під англійські слайди)</span><span>нотатки — українською</span><span><b>●</b> lightning-ядро · <b>○</b> поглиблення</span></p>
+
+  <div class="core">
+    <div class="k">Один меседж, який має лишитись у голові клієнта</div>
+    <p>«Ваша ідея стає робочим нативним iOS-застосунком — автономно, менш ніж за годину. Безпечно для enterprise і реально спроєктовано, а не generic-AI.»</p>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><b>5–7 хв</b><span>lightning</span></div>
+    <div class="fact"><b>~22 хв</b><span>реальний ран</span></div>
+    <div class="fact"><b>$5.54</b><span>SplitBill cost</span></div>
+    <div class="fact"><b>1150</b><span>рядків коду</span></div>
+    <div class="fact"><b>100%</b><span>автономно</span></div>
+  </div>
+
+  <h2>Перед стартом · pre-flight</h2>
+  <ul class="check">
+    <li><span class="box"></span><span>Відкрий дек, <b>fullscreen</b> у браузері. Перевір стрілки <b>← →</b> і що відкрився слайд <b>01/09</b>.</span></li>
+    <li><span class="box"></span><span>Слайди <b>04</b> (дашборд) і <b>05</b> (апка) <b>автоплеяться на вхід</b> — дай анімації догратися (~6 с), потім говори. Кнопка <b>↻ replay</b> є на 02/04/05.</span></li>
+    <li><span class="box"></span><span>Вимкни <b>reduced-motion</b> на демо-машині (інакше анімації статичні). Темний дек — ок для проєктора.</span></li>
+    <li><span class="box"></span><span>Тримай напоготові <b>одне число</b>: SplitBill — 8 стадій, ~22 хв, $5.54, 1150 рядків. Це твій якір на будь-яке «а це точно реально?».</span></li>
+    <li><span class="box"></span><span>Опційно: живий дашборд як бекап, якщо клієнт захоче побачити <b>реальний ран</b> на стенді.</span></li>
+  </ul>
+
+  <h2>Таймінг · маршрут</h2>
+  <div class="tablewrap">
+  <table class="timing">
+    <thead><tr><th>Слайд</th><th>Час</th><th>Роль у розповіді</th></tr></thead>
+    <tbody>
+      <tr class="core-row"><td>00 · Title</td><td class="t">0:20</td><td>Хук: ідея → апка</td></tr>
+      <tr class="core-row"><td>01 · Applications</td><td class="t">1:00</td><td>Це движок, не один продукт</td></tr>
+      <tr class="core-row"><td>02 · Calling card</td><td class="t">0:50</td><td>Сьогоднішній мінімальний приклад</td></tr>
+      <tr class="ext-row"><td>03 · Architecture</td><td class="t">1:00</td><td>Як воно влаштовано (теорія)</td></tr>
+      <tr class="core-row"><td>04 · Dashboard</td><td class="t">1:30</td><td>Жива фабрика на одному екрані</td></tr>
+      <tr class="core-row"><td>05 · The app</td><td class="t">1:00</td><td>Результат — спроєктований, не slop</td></tr>
+      <tr class="ext-row"><td>06 · Not a toy</td><td class="t">0:50</td><td>Безпека · якість · нативність</td></tr>
+      <tr class="core-row"><td>07 · Results</td><td class="t">0:45</td><td>Докази: реальні апки</td></tr>
+      <tr class="core-row"><td>08 · Vision + close</td><td class="t">0:40</td><td>Платформи, продукт, CTA</td></tr>
+    </tbody>
+    <tfoot><tr><td>Lightning (●)</td><td class="t">~6 хв</td><td>Повний (● + ○) ≈ 8 хв</td></tr></tfoot>
+  </table>
+  </div>
+
+  <h2>Слайд за слайдом</h2>
+
+  <!-- 00 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">00</span><span class="sc-title">Title</span><span class="sc-act">Hook</span><span class="sc-time">~20 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Задати рамку одним реченням: ESDLC — движок, що перетворює ідею на застосунок. Не пояснювати механіку.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"This is ESDLC — an engine that turns a client's idea into a working iOS app, on its own. Let me show you what that unlocks."</div>
+    <div class="trans"><b>Перехід →</b> «First — this isn't one product. It's a format.»</div>
+  </div>
+
+  <!-- 01 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">01</span><span class="sc-title">One engine, many applications</span><span class="sc-act">Act 1 · Idea</span><span class="sc-time">~60 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Показати ширину: той самий движок дає різні бізнес-плеї. iOS-візитівка — лише найпростіший приклад.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"Same pipeline, very different plays — embed it into live projects, productize it so one developer runs a whole app factory, win pre-sales. Today we show the simplest one: the calling card."</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts">
+      <li>Пальцем на підсвічену картку <b>«Conference calling card»</b> — "that's what you'll see today".</li>
+      <li>Не зачитуй усі 6 карток — назви 2–3 найсильніші для ЦЬОГО клієнта (productize / embed / pre-sales).</li>
+    </ul>
+    <div class="trans"><b>Перехід →</b> «So here's that calling card in practice.»</div>
+  </div>
+
+  <!-- 02 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">02</span><span class="sc-title">The summit calling card</span><span class="sc-act">Act 1 · Idea</span><span class="sc-time">~50 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Продати сценарій вау-ефекту на стенді: клієнт описав ідею → випив каву → забрав робочу апку.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"A prospect describes an app in one sentence. They grab a coffee. About twenty minutes later it's running on a real device — that's SplitBill: eight autonomous stages, 22 minutes, five and a half dollars."</div>
+    <div class="motion"><b>Моушен:</b> дай таймлайну (бігун по доріжці) проїхати до кінця, перш ніж називати число. Якщо хочеш повторити — кнопка <b>↻ replay</b>.</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts"><li>Головна думка: <b>вау — не апка, а продемонстрована спроможність компанії</b>, наживо.</li></ul>
+    <div class="trans"><b>Перехід →</b> «How does that actually work? Conceptually —» <i>(→ 03 на поглибленому проході, або одразу → 04 на lightning)</i></div>
+  </div>
+
+  <!-- 03 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">03</span><span class="sc-title">Architecture</span><span class="sc-act">Act 2 · ○ Extended</span><span class="sc-time">~60 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Теоретично, без плам'я коду: ЩО входить, ЩО відбувається, ЩО виходить. Закласти security-історію (trust-зони) + назвати архітектуру точно: <b>harness</b>, <b>spec-driven</b>.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"Idea goes in as untrusted input. A harness — a factory that runs the autonomous steps — turns it into a native app. It's spec-driven: a written spec with acceptance criteria, not a prompt, drives the design, the code and the tests that verify it. And it's isolated by design — the AI only ever proposes; it returns data and never touches the machine. The harness validates every token across three sealed zones."</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts">
+      <li>Якщо час тисне (lightning) — <b>пропусти цей слайд</b>; security все одно прозвучить на 06.</li>
+      <li>Новий кадр: фабрика — це <b>harness</b> (довірений оркестратор, що проганяє кроки): «the model proposes, the harness disposes». AI повертає лише дані (JSON), shell не отримує.</li>
+      <li>Бейдж <b>✓ Spec-driven</b>: специфікація з критеріями приймання (а не промпт) керує дизайном/кодом/тестами — <b>підкріплююча</b> рамка, не контраст із vibe-coding.</li>
+      <li>Для технічного клієнта тут можна затриматись на <b>3 trust-зонах</b>.</li>
+      <li><i>Опційний спіч (не на слайді):</i> «On a prior project I was the harness; in ESDLC the harness is code.»</li>
+    </ul>
+    <div class="trans"><b>Перехід →</b> «And you watch all of that happen on one screen.»</div>
+  </div>
+
+  <!-- 04 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">04</span><span class="sc-title">The dashboard — ANIMATION</span><span class="sc-act">Act 2 · How</span><span class="sc-time">~90 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Показати, що це не чорна скринька: оператор бачить живий прогрес. Це найсильніший «демо»-момент.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"One screen, the whole factory. Each stage lights up as it runs — understand, spec, design, build, test, audit, brand — the clock and cost tick up live, and the finish line is the app launching on a device."</div>
+    <div class="motion"><b>Моушен (ключовий слайд):</b> <b>мовчи ~6 секунд</b>, доки стадії запалюються і таймер біжить до 21:53 / $5.54 — хай зал подивиться. Потім коментуй. <b>↻ replay</b> — якщо хочеш прогнати ще раз під питання.</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts"><li>Підкресли <b>opus/sonnet</b> біля стадій — «different models for different jobs».</li><li>Фініш = <b>реальний запуск</b>, не скриншот.</li></ul>
+    <div class="trans"><b>Перехід →</b> «So what did it actually build?»</div>
+  </div>
+
+  <!-- 05 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">05</span><span class="sc-title">The app it built — ANIMATION (Midnight Ember)</span><span class="sc-act">Act 2 · How</span><span class="sc-time">~60 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Зняти заперечення «AI = потворно». Це дефолтний вигляд кожної апки, не ручна робота.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"Every app ships with a real design system — lit backdrops, gradient glow, depth, spring motion. This is the default look, not a custom job. We call the kit Midnight Ember."</div>
+    <div class="motion"><b>Моушен:</b> дай телефону програти інтро (сяйво+іскра) → головний екран. <b>↻ replay</b> праворуч.</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts"><li>Слово <b>«default»</b> — наголос. Якість закладена структурно, а не випрошена промптом.</li></ul>
+    <div class="trans"><b>Перехід →</b> «Which brings up the real question: is this a toy?»</div>
+  </div>
+
+  <!-- 06 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">06</span><span class="sc-title">Why it's not a toy</span><span class="sc-act">Act 3 · ○ Extended</span><span class="sc-time">~50 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Три опори, що відрізняють демо від чогось, за що можна відповідати перед enterprise.</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"Three things. Secure — the AI never gets a shell; it runs inside a harness that validates every token and executes. Designed — a built-in quality floor, not generic output. And real — a genuine native iOS app on a device in under an hour, not a web mock-up."</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts">
+      <li>Для бізнес-клієнта <b>Security</b> — найважча опора; на ній затримайся: ключове слово — <b>harness</b> («the AI never gets a shell — it runs inside a harness; it returns data, the harness validates and executes; enterprise-safe by construction»).</li>
+      <li>Той самий термін, що на 03 — <b>harness</b> замикає security-історію: тут вона з опори стає висновком.</li>
+    </ul>
+    <div class="trans"><b>Перехід →</b> «And it's not one lucky app — here's the batch.»</div>
+  </div>
+
+  <!-- 07 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">07</span><span class="sc-title">Results gallery</span><span class="sc-act">Act 3 · Why</span><span class="sc-time">~45 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Докази масштабу: реальні іконки + скриншоти + стат-стрічка. «Not a demo trick.»</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"Ten real apps, each built autonomously — about twenty minutes and a few dollars apiece, a thousand to seventeen hundred lines of real code. All of this, hands-off."</div>
+    <div class="trans"><b>Перехід →</b> «So where does this go from here?»</div>
+  </div>
+
+  <!-- 08 -->
+  <div class="slide-card">
+    <div class="sc-head"><span class="sc-num">08</span><span class="sc-title">Vision &amp; platforms + close</span><span class="sc-act">Act 3 · Close</span><span class="sc-time">~40 с</span></div>
+    <div class="lbl">Мета</div>
+    <div class="goal">Розширити горизонт і закрити з CTA. Залишити клієнта з «а що, якби для нас?».</div>
+    <div class="lbl">Кажеш</div>
+    <div class="say">"iOS today — the same engine extends to Android and Web. It can be productized so one developer runs it, or embedded straight into your delivery. Your idea, shipped — autonomously. Let's talk about yours."</div>
+    <div class="lbl">Акценти</div>
+    <ul class="pts"><li>Останній рядок — <b>пряме запрошення</b> до розмови/пілота. Не закінчуй на «дякую» — закінчуй питанням до клієнта.</li></ul>
+  </div>
+
+  <h2>Складні питання · тримай напоготові</h2>
+
+  <details class="qa"><summary>«Це справді автономно, чи ви дописали руками?»</summary>
+    <div class="ans"><b>A:</b> Агент лише повертає дані — жоден рядок застосунку не пише людина. Збирає все довірений код. На дашборді (слайд 04) видно живі стадії. За бажання — запустимо один ран прямо зараз на стенді.</div></details>
+
+  <details class="qa"><summary>«Наш код / IP у безпеці? Що з доступом AI до машини?»</summary>
+    <div class="ans"><b>A:</b> AI <b>ніколи не отримує оболонку</b> (shell) на машині. Він пропонує — виконує й валідує кожен токен довірений код, у трьох ізольованих зонах. Це enterprise-safe за дизайном, а не за домовленістю.</div></details>
+
+  <details class="qa"><summary>«Скільки це коштує?»</summary>
+    <div class="ans"><b>A:</b> У цих ранах — <b>~$3–6</b> модельного часу на апку, ~20 хв. Інженерного нагляду майже нуль. Для масштабу: 10 апок — це десятки доларів, не людино-тижні.</div></details>
+
+  <details class="qa"><summary>«А Android / Web?»</summary>
+    <div class="ans"><b>A:</b> Архітектура платформо-незалежна. Сьогодні підключено iOS; Android і Web — <b>розширення того самого движка</b>, не переписування з нуля.</div></details>
+
+  <details class="qa"><summary>«Воно будує реальні складні апки чи тільки іграшки?»</summary>
+    <div class="ans"><b>A:</b> Сьогоднішній фокус — сфокусовані нативні апки (1000–1700 рядків, реальний дизайн-систем, тести, брендинг). Для великих продуктів модель інша: <b>вбудувати движок у команду</b>, щоб прискорити розробку, а не замінити її.</div></details>
+
+  <details class="qa"><summary>«Виглядає як типовий AI-дизайн?»</summary>
+    <div class="ans"><b>A:</b> Ні — вбудований дизайн-систем (Midnight Ember) задає якісну планку структурно. Поверни на слайд 05: це <b>дефолтний</b> вигляд, а не ручна робота.</div></details>
+
+  <details class="qa"><summary>«А якщо ідея поза можливостями движка?»</summary>
+    <div class="ans"><b>A:</b> Він <b>чесно відмовляється</b> (наприклад, коли потрібен живий мережевий API), а не вдає й не падає. Прозорість меж — частина надійності.</div></details>
+
+  <details class="qa"><summary>«Хто це підтримує? Справді один розробник?»</summary>
+    <div class="ans"><b>A:</b> Так — це і є productize-вектор: один інженер оперує «фабрикою» застосунків. Саме тому ми говоримо про це як про продукт, а не послугу.</div></details>
+
+  <p class="endnote"><b>ESDLC</b> · Applied AI &nbsp;—&nbsp; дек: slides 01–09 · це шпаргалка для сцени</p>
+
+</div>
+</body>
+</html>

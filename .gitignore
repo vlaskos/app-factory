@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Node / tooling
+node_modules/
+*.log
+
+# Xcode / generated build output (examples use XcodeGen project.yml, not .xcodeproj)
+*.xcodeproj/
+.build/
+DerivedData/
+*.xcuserstate
+
+# Private — never publish the orchestrator or run artifacts
+spine/
+vendor-skills/
+runs/
