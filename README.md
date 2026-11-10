@@ -1,8 +1,16 @@
 # ESDLC — an autonomous software delivery engine
 
-A client idea goes in; a working, native iOS app comes out — designed, built, tested, and launched on a device, with two human checkpoints and nothing in between. This repository is the conference showcase: the slide deck, the presenter notes, the agent skills that drive each stage, and three example apps the engine produced.
+A client idea goes in; a working, native iOS app comes out — designed, built, tested, and launched on a device, with two human checkpoints and nothing in between. This repository is the conference showcase: the slide deck, the agent skills that drive each stage, and three example apps the engine produced.
 
-**▶ Live deck:** <https://vlaskos.github.io/esdlc/> &nbsp;·&nbsp; **Presenter notes:** [cheatsheet.html](cheatsheet.html)
+<p align="center">
+  <a href="https://vlaskos.github.io/esdlc/">
+    <img src="assets/app-demo.gif" alt="Split Bill — a native iOS app the engine built, shown running" width="260">
+  </a>
+  <br>
+  <em>One of the apps the engine built, launched on a device — tap to open the live deck.</em>
+</p>
+
+**▶ Live deck:** <https://vlaskos.github.io/esdlc/>
 
 > The deck runs entirely in the browser — one self-contained file, no build step. Use **← / →** to navigate and **L** to toggle English / Ukrainian.
 
@@ -25,7 +33,6 @@ Because the model can only return data, a hostile prompt can change what the app
 | Path | What |
 |---|---|
 | `index.html` | The deck — self-contained; GitHub Pages serves it live |
-| `cheatsheet.html` | Presenter notes — per-slide goals and talk track |
 | `skills/` | The ten pipeline skills (intake → release) the harness loads per stage |
 | `architecture-kit/` | The standing iOS architecture kit every generated app obeys |
 | `examples/` | Three apps the engine built — real, compilable Swift |

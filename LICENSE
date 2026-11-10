@@ -23,9 +23,8 @@ SOFTWARE.
 ---
 
 This license covers the original material in this repository: the slide deck
-(index.html), the presenter notes (cheatsheet.html), the pipeline skills in
-skills/, the architecture kit in architecture-kit/, and the example apps in
-examples/.
+(index.html), the pipeline skills in skills/, the architecture kit in
+architecture-kit/, and the example apps in examples/.
 
 Third-party agent skills used by the pipeline are NOT included in this
 repository. They are credited, with their own licenses and pinned commits, in
