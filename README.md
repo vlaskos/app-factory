@@ -3,14 +3,14 @@
 A client idea goes in; a working, native iOS app comes out — designed, built, tested, and launched on a device, with two human checkpoints and nothing in between. This repository is the conference showcase: the slide deck, the agent skills that drive each stage, and three example apps the engine produced.
 
 <p align="center">
-  <a href="https://vlaskos.github.io/esdlc/">
-    <img src="assets/app-demo.gif" alt="Split Bill — a native iOS app the engine built, shown running" width="260">
+  <a href="https://vlaskos.github.io/app-factory/">
+    <img src="assets/dashboard.gif" alt="The App Factory dashboard — a job running the full pipeline live, from intake to a shipped app" width="760">
   </a>
   <br>
-  <em>One of the apps the engine built, launched on a device — tap to open the live deck.</em>
+  <em>The operator's view — one job running the whole pipeline live, intake → shipped app. Tap to open the live deck.</em>
 </p>
 
-**▶ Live deck:** <https://vlaskos.github.io/esdlc/>
+**▶ Live deck:** <https://vlaskos.github.io/app-factory/>
 
 > The deck runs entirely in the browser — one self-contained file, no build step. Use **← / →** to navigate and **L** to toggle English / Ukrainian.
 
@@ -45,6 +45,12 @@ Because the model can only return data, a hostile prompt can change what the app
 ## Example apps
 
 `examples/` holds three local-only apps the pipeline produced end to end — a bill-splitter, a calculator, and a shopping list — each with its SwiftUI sources, an XcodeGen `project.yml`, and swift-testing suites. They target the current iOS baseline (Swift 6, SwiftUI, Observation, SwiftData).
+
+<p align="center">
+  <img src="assets/app-demo.gif" alt="Split Bill — one of the generated apps, running on a device in the Midnight Ember style" width="240">
+  <br>
+  <em>Split Bill — one of the generated apps, launched on a device.</em>
+</p>
 
 ## Running the deck
 
